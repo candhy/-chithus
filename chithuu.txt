@@ -1,0 +1,154 @@
+public class Client {
+	static Scanner scanner=new Scanner(System.in);
+	static DemandDraftService demanddraftService=null;           
+	static DemandDraftServiceImpl demanddraftServiceImpl=null;   
+	public static void main(String[] args) {
+DemandDraft demandDraft=null;
+String transaction_id=null;
+int option=0;
+
+
+double Commission;
+double amount;
+double dd_amount;
+System.out.println("ennter the amount");
+amount=Read.nextDouble();
+if(amount<=5000)
+commission=10;
+else if(amount>5000 && amount<10000)
+commission=41;
+else if(amount>10000 && amount<100000)
+commission=51;
+else if(amount>100000 && amount<500000)
+commission=306;
+dd_amount=commission*amount;
+
+
+System.out.println("Display menu to employee should be as follows");
+System.out.println("1.Enter Demand Draft Details");
+System.out.println("2.Exit");
+try
+{
+option=scanner.NextInt();
+switch(option)
+		{
+		case 1:
+			while(demandDraft==null)
+			{
+				demanddraft=populateDemandDraft();
+			}
+			try {
+				demanddraftService=new DemandDraftServiceImpl();
+				transaction_id=demanddraftService.addDemandDraftDetails(demandDraft);
+				System.out.println("Your Demand Draft request has been successfully registered along with the" +transaction_id);
+				
+				
+			}
+			catch (DemandDraftException demanddraftException) {
+						logger.error("exception occured", demanddraftException);
+						System.err.println("ERROR : "+ demanddraftException.getMessage());
+					}
+
+			finally
+			{
+				transaction_id=null;
+				demanddraftService=null;
+				demandDraft=null;
+			}
+			break;
+
+case 2:
+
+					System.out.print("Exit Trust Application");
+					System.exit(0);
+					break;
+				default:
+					System.out.println("Enter a valid option[1-4]");
+				}// end of switch
+			}
+
+			catch (InputMismatchException e) {
+				sc.nextLine();
+				System.err.println("Please enter a numeric value, try again");
+			}
+
+private static DemandDraft populateDemandDraft() {
+
+		
+		DemandDraft demandDraft = new DemandDraft();
+
+		
+		System.out.println("Enter name of the customer: ");
+		demandDraft.setDonorName(sc.next());
+
+		System.out.println("Enter the customer phone number: ");
+		demandDraft.setPhoneNumber(sc.next());
+
+		System.out.println("In favor of: ");
+		demandDraft.setAddress(sc.next());
+
+		System.out.println("Enter the demand draft amount: ");
+                        demandDraft.setAddress(sc.next());
+
+                        System.out.println("Enter Remarks: ");
+                        demandDraft.setAddress(sc.next());
+
+		try {
+			demandDraft.setDonationAmount(sc.nextFloat());
+		} catch (InputMismatchException inputMismatchException) {
+			sc.nextLine();
+			System.err.println("Please enter a numeric value for donation amount, try again");
+			}
+
+		demanddraftServiceImpl = new DemandDraftServiceImpl();
+
+		try {
+			demanddraftServiceImpl.validateDemandDraft(demandDraft);
+			return demandDraft;
+		} catch (DonorException donorException) {
+			logger.error("exception occured", demanddraftException);
+			System.err.println("Invalid data:");
+			System.err.println(demanddraftException.getMessage() + " \n Try again..");
+			System.exit(0);
+
+		}
+		return null;
+
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
